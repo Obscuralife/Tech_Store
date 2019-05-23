@@ -1,0 +1,90 @@
+﻿@inject TechStore.Models.FilterModel.CpuFilters cpuFilter
+@model IEnumerable<TS.DataAccessLayer.Models.Cpu>
+@{
+    ViewData["Title"] = "CPU";
+}
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="row-filter panel">
+    <div class="filter">
+        <div>Vendor:</div>
+        <ul>
+            @foreach (var cpuVendor in cpuFilter.Vendors)
+            {
+                <li>
+                    @Html.CheckBoxFor(model => cpuVendor.Value)
+                    <label>@cpuVendor.Key</label>
+                    @Html.HiddenFor(model => cpuVendor.Value)
+                </li>
+            }
+        </ul>
+        <div>Model:</div>
+        <ul>
+            @foreach (var cpuSerials in cpuFilter.ModelsSerias)
+            {
+                <li>
+                    @Html.CheckBox($"{cpuSerials}", false) @cpuSerials.Key
+                </li>
+            }
+        </ul>
+        <div>Socket:</div>
+        <ul>
+            @foreach (var cpuSocket in cpuFilter.Sockets)
+            {
+                <li>
+                    @Html.CheckBox($"{cpuSocket}", false) @cpuSocket.Key
+                </li>
+            }
+        </ul>
+        <idv>Cores:</idv>
+        <ul>
+            @foreach (var cpuCores in cpuFilter.Cores)
+            {
+                <li>
+                    @Html.CheckBox($"{cpuCores}", false) @cpuCores.Key
+                </li>
+            }
+        </ul>
+        <ul>
+            @foreach (var cpuPropery in cpuFilter.Properties)
+            {
+            <li>
+                @cpuPropery
+                <div class="form_group">
+                    <label class="control_label"></label>
+                    <input class="form_control"/>
+                    <label class="control_label"></label>
+                    <input class="form_control" />
+                    
+                </div>
+            </li>
+            }
+        </ul>
+
+
+        <div class="form-group">
+            <a  asp-route-id="@cpuFilter" asp-action="Index" class="btn btn-primary">Show</a>
+        </div>
+
+    </div>
+    <div class="product-list">
+        @foreach (var cpu in Model)
+        {
+            <div class="wall">
+                <h3>
+                    <strong>
+                        <a class="" asp-action="Details" asp-route-id="@cpu.Id">@cpu.Vendor @cpu.ModelSeries</a></strong>
+                    <span class="pull-right label label-primary" style="color:blue">
+                        <a asp-action="Edit" asp-route-id="@cpu.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@cpu.Id">Delete</a>
+                        @cpu.Price
+                    </span>
+                </h3> 
+                <span class="lead">@cpu.Description</span>
+            </div>
+
+        }
+    </div>
+</div>

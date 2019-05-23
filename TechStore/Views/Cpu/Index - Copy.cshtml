@@ -1,0 +1,75 @@
+﻿@model IEnumerable<TS.DataAccessLayer.Models.Cpu>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Central processing units</h1>
+<p>
+    The central processing unit (CPU) is the unit which performs most of the processing inside a computer.
+    To control instructions and data flow to and from other parts of the computer, the CPU relies heavily on a chipset,
+    which is a group of microchips located on the motherboard.
+</p>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ModelSeries)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Socket)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cores)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CoreFrequence)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cache)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <ul>
+                <li>@Html.DisplayFor(modelItem => item.ModelSeries)</li>
+                <li>@Html.DisplayFor(modelItem => item.Socket)</li>
+                <li>@Html.DisplayFor(modelItem => item.Cores)</li>
+                <li>@Html.DisplayFor(modelItem => item.CoreFrequence)</li>
+                <li>@Html.DisplayFor(modelItem => item.Cache)</li>
+                <li>@Html.DisplayFor(modelItem => item.CategoryName)</li>
+                <li>@Html.DisplayFor(modelItem => item.Vendor)</li>
+                <li>@Html.DisplayFor(modelItem => item.Year)</li>
+                <li>@Html.DisplayFor(modelItem => item.Price)</li>
+                <li>@Html.DisplayFor(modelItem => item.Description)</li>
+            </ul>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </td>
+
+    }
+    </table>
