@@ -39,5 +39,4 @@ E:\git\Tech_Store\TechStore\obj\Debug\netcoreapp2.2\Razor\Views\Cpu\Delete.g.csh
 E:\git\Tech_Store\TechStore\obj\Debug\netcoreapp2.2\Razor\Views\Cpu\Details.g.cshtml.cs
 E:\git\Tech_Store\TechStore\obj\Debug\netcoreapp2.2\Razor\Views\Cpu\Edit.g.cshtml.cs
 E:\git\Tech_Store\TechStore\obj\Debug\netcoreapp2.2\Razor\Views\Cpu\Index.g.cshtml.cs
-E:\git\Tech_Store\TechStore\obj\Debug\netcoreapp2.2\Razor\Views\Cpu\Index - Copy.g.cshtml.cs
 E:\git\Tech_Store\TechStore\obj\Debug\netcoreapp2.2\TechStore.csprojAssemblyReference.cache

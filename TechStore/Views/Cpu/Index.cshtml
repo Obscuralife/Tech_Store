@@ -4,84 +4,181 @@
     ViewData["Title"] = "CPU";
 }
 
+@section Scripts
+    {
+    <script>
+        ShowAllProducts();
+        $(document).ready;
+
+        $('._checkbox').click(function () {
+            ChangeCheckBoxColor($(this));
+
+            if ($(this).is(':checked')) {
+                AddPrepareProductsList($(this));
+            }
+            else {
+                RemovePrepareProductsList($(this));
+            }
+        });
+
+        $('.reset').click(function () {
+            $('body input:checkbox').prop('checked', false);
+            ResetFilteres();
+        });
+
+        function ChangeCheckBoxColor(param) {
+            if (param.is(':checked')) {
+                param.parent().addClass('brown');
+            }
+            else {
+                param.parent().removeClass('brown');
+            }
+        }
+
+        function AddPrepareProductsList(param) {
+            var data = param.val();
+            $.ajax({
+                url: '/api/GetCpusApi/AddPrepareProducts',
+                contentType: 'application/json',
+                method: 'post',
+                async: true,
+                data: JSON.stringify({
+                    RequestValue: data
+                }),
+                complete: (function () {
+                    ShowProductsCount();
+                })
+            })
+        }
+        function RemovePrepareProductsList(param) {
+            var data = param.val();
+            $.ajax({
+                url: '/api/GetCpusApi/RemovePrepareProducts',
+                contentType: 'application/json',
+                method: 'post',
+                async: true,
+                data: JSON.stringify({
+                    RequestValue: data
+                }),
+                complete: (function () {
+                    ShowProductsCount();
+                })
+            })
+        }
+
+        function ShowProductsCount() {
+            $.get('/api/GetCpusApi/GetProductsCount').
+                done(function (data) {
+                    $('.product-count').text(data);
+                });
+        }
+
+        function ShowAllProducts() {
+            $.get('/api/GetCpusApi/GetProductsCount').
+                done(function (data) {
+                    $('.product-count').text(data);
+                });
+        }
+
+        function ResetFilteres() {
+            $.get('/api/GetCpusApi/ClearFilteredProducts');
+        }
+
+    </script>
+}
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
 <div class="row-filter panel">
     <div class="filter">
         <div>Vendor:</div>
-        <ul>
+        <ul style="list-style:none">
             @foreach (var cpuVendor in cpuFilter.Vendors)
             {
                 <li>
-                    @Html.CheckBoxFor(model => cpuVendor.Value)
-                    <label>@cpuVendor.Key</label>
-                    @Html.HiddenFor(model => cpuVendor.Value)
+
+                    <input id="controls" class="_checkbox" type="checkbox" value="Vendor:@cpuVendor">
+                    <span>@cpuVendor</span><br>
+
                 </li>
             }
         </ul>
+
         <div>Model:</div>
-        <ul>
+        <ul style="list-style:none">
             @foreach (var cpuSerials in cpuFilter.ModelsSerias)
             {
                 <li>
-                    @Html.CheckBox($"{cpuSerials}", false) @cpuSerials.Key
+                    <input id="controls" class="_checkbox" type="checkbox" value="ModelSeries:@cpuSerials">
+                    <span> @cpuSerials</span><br>
                 </li>
             }
         </ul>
+
         <div>Socket:</div>
-        <ul>
+        <ul style="list-style:none">
             @foreach (var cpuSocket in cpuFilter.Sockets)
             {
                 <li>
-                    @Html.CheckBox($"{cpuSocket}", false) @cpuSocket.Key
+                    <input id="controls" class="_checkbox" type="checkbox" value="Socket:@cpuSocket">
+                    <span> @cpuSocket</span><br>
                 </li>
             }
         </ul>
+
         <idv>Cores:</idv>
-        <ul>
+        <ul style="list-style:none">
             @foreach (var cpuCores in cpuFilter.Cores)
             {
                 <li>
-                    @Html.CheckBox($"{cpuCores}", false) @cpuCores.Key
+                    <input id="controls" class="_checkbox" type="checkbox" value="Cores:@cpuCores">
+                    <span> @cpuCores</span><br>
                 </li>
             }
         </ul>
-        <ul>
+
+        <ul style="list-style:none">
             @foreach (var cpuPropery in cpuFilter.Properties)
             {
-            <li>
-                @cpuPropery
-                <div class="form_group">
-                    <label class="control_label"></label>
-                    <input class="form_control"/>
-                    <label class="control_label"></label>
-                    <input class="form_control" />
-                    
-                </div>
-            </li>
+                <li>
+                    @cpuPropery
+                    <div class="form_group">
+                        <label class="control_label"></label>
+                        <input class="form_control" />
+                        <label class="control_label"></label>
+                        <input class="form_control" />
+
+                    </div>
+                </li>
             }
         </ul>
 
-
-        <div class="form-group">
-            <a  asp-route-id="@cpuFilter" asp-action="Index" class="btn btn-primary">Show</a>
+        <div class="jsons">
+            <button id="clickclack" class="btn btn-primary">click</button>
+            <span class="product-count"> </span>
         </div>
 
+        <div class="form-group reset">
+            <button id="checkbox-off" class="btn btn-primary">Reset</button>
+        </div>
     </div>
+
     <div class="product-list">
         @foreach (var cpu in Model)
         {
             <div class="wall">
                 <h3>
                     <strong>
-                        <a class="" asp-action="Details" asp-route-id="@cpu.Id">@cpu.Vendor @cpu.ModelSeries</a></strong>
-                    <span class="pull-right label label-primary" style="color:blue">
+                        <a class="" asp-action="Details" asp-route-id="@cpu.Id">@cpu.Vendor @cpu.ModelSeries</a>
+                    </strong>
+                    <span class="pull-right label label-primary">
                         <a asp-action="Edit" asp-route-id="@cpu.Id">Edit</a> |
                         <a asp-action="Delete" asp-route-id="@cpu.Id">Delete</a>
-                        @cpu.Price
+                        @cpu.Price$
                     </span>
-                </h3> 
+                </h3>
                 <span class="lead">@cpu.Description</span>
             </div>
 

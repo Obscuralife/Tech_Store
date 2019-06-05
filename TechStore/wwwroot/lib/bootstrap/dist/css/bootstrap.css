@@ -551,7 +551,11 @@ pre {
     border: 1px solid #e3e3e3;
     border-radius: 4px;
 }
-
+._checkbox {
+    display: inline-block;
+    margin: 0;
+    line-height: 21px;
+}
 .pull-right {
     float: right !important;
 }
@@ -688,6 +692,12 @@ pre {
     margin-top: 20px;
     margin-bottom: 100px;
 }
+.brown{
+    text-decoration:underline;
+    color:brown
+}
+
+
 .product-list {
     position: relative;
     min-height: 1px;
@@ -8281,6 +8291,19 @@ button.bg-dark:focus {
     bottom: 0;
     left: 0;
     z-index: 1030;
+}
+.fixed-box {
+    height: 60px;
+}
+
+.fixed-div {
+    height: 60px;
+}
+
+.fixed {
+    position: fixed;
+    z-index: 9999;
+    top: 0;
 }
 
 @supports ((position: -webkit-sticky) or (position: sticky)) {

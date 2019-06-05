@@ -9,42 +9,44 @@ namespace TechStore.Models.FilterModel
 {
     public class CpuFilters
     {
-        public Dictionary<string, bool> Vendors { get;  set; }
-        public Dictionary<string, bool> Cores { get;  set; }
-        public Dictionary<string, bool> ModelsSerias { get;  set; }
-        public Dictionary<string, bool> Sockets { get;  set; }
-        public List<string> Properties { get;  set; }
+        public List<string> Vendors { get; private set; }
+        public List<string> Cores { get; private set; }
+        public List<string> Properties { get; private set; }
+        public List<string> ModelsSerias { get; private set; }
+        public List<string> Sockets { get; private set; }
 
         public CpuFilters(StoreDbContext context)
         {
-            Vendors = new Dictionary<string, bool>();
-            Cores = new Dictionary<string, bool>();
+            Vendors = new List<string>();
+            Cores = new List<string>();
             Properties = new List<string>();
-            ModelsSerias = new Dictionary<string, bool>();
-            Sockets = new Dictionary<string, bool>();
+            ModelsSerias = new List<string>();
+            Sockets = new List<string>();
+
             foreach (var cpu in context.Cpus)
             {
-                if (!Vendors.ContainsKey(cpu.Vendor))
+                if (!Vendors.Contains(cpu.Vendor))
                 {
-                    Vendors.Add(cpu.Vendor, false);
+                    Vendors.Add(cpu.Vendor);
                 }
-                if (!Cores.ContainsKey(cpu.Cores))
+                if (!Cores.Contains(cpu.Cores))
                 {
-                    Cores.Add(cpu.Cores, false);
+                    Cores.Add(cpu.Cores);
                 }
-                if (!ModelsSerias.ContainsKey(cpu.ModelSeries))
+                if (!ModelsSerias.Contains(cpu.ModelSeries))
                 {
-                    ModelsSerias.Add(cpu.ModelSeries, false);
+                    ModelsSerias.Add(cpu.ModelSeries);
                 }
-                if (!Sockets.ContainsKey(cpu.Socket))
+                if (!Sockets.Contains(cpu.Socket))
                 {
-                    Sockets.Add(cpu.Socket, false);
+                    Sockets.Add(cpu.Socket);
                 }
 
                 var properties = (typeof(Cpu)).GetProperties();
                 foreach (var propertyInfo in properties)
                 {
                     string property = propertyInfo.Name;
+
                     if (!Properties.Contains(property))
                     {
                         switch (property)
@@ -63,7 +65,6 @@ namespace TechStore.Models.FilterModel
                                 break;
                         }
                     }
-
                 }
             }
         }

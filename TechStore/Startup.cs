@@ -8,7 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using TechStore.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TechStore.Repository;
 using TechStore.Models.FilterModel;
+using TechStore.Models.FilteredProducts;
+using TS.DataAccessLayer.Models.Abstract;
 
 namespace TechStore
 {
@@ -31,7 +34,8 @@ namespace TechStore
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddDbContext<StoreDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddTransient<CpuFilters>();
+            services.AddScoped<CpuFilters>();
+            services.AddScoped<CpuRepository>();
             services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<StoreDbContext>();
@@ -40,7 +44,7 @@ namespace TechStore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, CpuRepository cpuRepository)
         {
             if (env.IsDevelopment())
             {

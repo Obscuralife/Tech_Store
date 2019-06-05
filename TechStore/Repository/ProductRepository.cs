@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TechStore.Controllers.BaseApiModel;
 using TechStore.Data;
 using TS.DataAccessLayer.Models.Abstract;
 
@@ -21,7 +22,7 @@ namespace TechStore.Repository
 
         public async virtual Task<List<T>> GetAllProductsAsnyc()
         {
-            return  await _entity.ToListAsync();
+            return await _entity.ToListAsync();
         }
 
         public async virtual Task<T> GetProductByIdAsync(long id)
@@ -55,7 +56,42 @@ namespace TechStore.Repository
             await RemoveAsync(product);
             return product;
         }
-        
 
+        public async virtual Task<List<T>> GetProductsByRequests(RequestHelper request)
+        {
+            return await _entity.Where(p => p.GetType()
+                                             .GetProperty(request.Key)
+                                             .GetValue(p).Equals(request.Value))
+                                             .ToListAsync();
+        }
+
+        public virtual List<T> GetProductsByRequests(List<RequestHelper> requests)
+        {
+            var products = new List<T>();
+
+            foreach (var product in _entity.AsParallel())
+            {
+                bool allpropertyEquals = true;
+                foreach (var request in requests)
+                {
+                    var type = product.GetType();
+                    var prop = type.GetProperty(request.Key);
+                    var value = (string)prop.GetValue(product);
+
+                    if (value != request.Value)
+                    {
+                        allpropertyEquals = false;
+                        break;
+                    }
+                }
+
+                if (allpropertyEquals)
+                {
+                    products.Add(product);
+                }
+            }
+
+            return products;
+        }
     }
 }

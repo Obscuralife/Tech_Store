@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TS.DataAccessLayer.Models;
 using TechStore.Data;
 using TechStore.Repository;
-using TechStore.Models;
-using TechStore.Models.FilterModel;
 
 namespace TechStore.Controllers
 {
@@ -17,6 +12,7 @@ namespace TechStore.Controllers
     public class CpuController : Controller
     {
         private readonly CpuRepository _repository;
+
         public CpuController(StoreDbContext context)
         {
             _repository = new CpuRepository(context);
@@ -24,12 +20,6 @@ namespace TechStore.Controllers
 
         // GET: Cpus
         public async Task<IActionResult> Index()
-        {
-            return View(await _repository.GetAllProductsAsnyc());
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Index(CpuFilters  model)
         {
             return View(await _repository.GetAllProductsAsnyc());
         }
