@@ -46,7 +46,7 @@
                     RequestValue: data
                 }),
                 complete: (function () {
-                    ShowProductsCount();
+                    ShowFilteredProductsCount();
                 })
             })
         }
@@ -61,13 +61,13 @@
                     RequestValue: data
                 }),
                 complete: (function () {
-                    ShowProductsCount();
+                    ShowFilteredProductsCount();
                 })
             })
         }
 
-        function ShowProductsCount() {
-            $.get('/api/GetCpusApi/GetProductsCount').
+        function ShowFilteredProductsCount() {
+            $.get('/api/GetCpusApi/GetFilteredProductsCount').
                 done(function (data) {
                     $('.product-count').text(data);
                 });

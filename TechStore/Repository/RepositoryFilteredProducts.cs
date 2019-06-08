@@ -12,31 +12,31 @@ namespace TechStore.Models.FilteredProducts
         public static List<T> ProductCache { get; private set; }
         public static List<RequestHelper> RequestHistory { get; private set; }
 
-
         public static int Count() => ProductCache.Count;
-        public static void Clear()
-        {
-            ProductCache.Clear();
-            RequestHistory.Clear();
-        }
         public static List<RequestHelper> GetRequestHistory() => RequestHistory;
 
+        public static void Clear()
+        {
+            ProductCache?.Clear();
+            RequestHistory?.Clear();
+        }
+        public static void ClearCache()
+        {
+            ProductCache?.Clear();
+        }
+
+        public static bool ContainsProducts() => (RequestHistory is null || RequestHistory.Count == 0) ? false : true;
         public static void RemoveRange(RequestHelper request)
         {
-            var products = ProductCache.Where(p => p.GetType()
-                                             .GetProperty(request.Key)
-                                             .GetValue(p).Equals(request.Value))
-                                             .ToList();
 
-            foreach (var product in products.AsParallel())
+            RequestHistory.RemoveAll(p => p.Key == request.Key || p.Value == request.Value);
+            if (RequestHistory.Count == 0)
             {
-                ProductCache.Remove(product);
+                ClearCache();
             }
-
-            var requests = RequestHistory.Where(p => p == request);
-            foreach (var item in requests)
+            else
             {
-                RequestHistory.Remove(item);
+                ProductCache = GetProductsByRequests(RequestHistory);
             }
         }
 
@@ -64,7 +64,7 @@ namespace TechStore.Models.FilteredProducts
             }
         }
 
-        public static List<T> GetProductsByPropertyAsync(List<RequestHelper> requests)
+        public static List<T> GetProductsByRequests(List<RequestHelper> requests)
         {
             var products = new List<T>();
 
@@ -91,6 +91,14 @@ namespace TechStore.Models.FilteredProducts
             }
 
             return products;
+        }
+
+        public static List<T> GetProductsByRequests(RequestHelper request)
+        {
+            return ProductCache.Where(p => p.GetType()
+                                             .GetProperty(request.Key)
+                                             .GetValue(p).Equals(request.Value))
+                                             .ToList();
         }
     }
 }
