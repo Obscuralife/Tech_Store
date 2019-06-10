@@ -72,7 +72,7 @@ namespace TechStore.Repository
             foreach (var product in _entity.AsParallel())
             {
                 bool allpropertyEquals = true;
-                foreach (var request in requests)
+                foreach (var request in requests.AsParallel())
                 {
                     var type = product.GetType();
                     var prop = type.GetProperty(request.Key);
@@ -81,7 +81,6 @@ namespace TechStore.Repository
                     if (value != request.Value)
                     {
                         allpropertyEquals = false;
-                        break;
                     }
                 }
 

@@ -14,6 +14,7 @@ namespace TechStore.Models.FilteredProducts
 
         public static int Count() => ProductCache.Count;
         public static List<RequestHelper> GetRequestHistory() => RequestHistory;
+        public static RequestHelper LastRequest() => RequestHistory?.LastOrDefault();
 
         public static void Clear()
         {
@@ -26,19 +27,7 @@ namespace TechStore.Models.FilteredProducts
         }
 
         public static bool ContainsProducts() => (RequestHistory is null || RequestHistory.Count == 0) ? false : true;
-        public static void RemoveRange(RequestHelper request)
-        {
-
-            RequestHistory.RemoveAll(p => p.Key == request.Key || p.Value == request.Value);
-            if (RequestHistory.Count == 0)
-            {
-                ClearCache();
-            }
-            else
-            {
-                ProductCache = GetProductsByRequests(RequestHistory);
-            }
-        }
+        public static void RemoveRange(RequestHelper request) => RequestHistory.RemoveAll(p => p.Key == request.Key && p.Value == request.Value);
 
         public static void AddRange(List<T> products)
         {
@@ -48,7 +37,13 @@ namespace TechStore.Models.FilteredProducts
             }
             else
             {
-                ProductCache.AddRange(products);
+                foreach (var product in products)
+                {
+                    if (!ProductCache.Contains(product))
+                    {
+                        ProductCache.Add(product);
+                    }
+                }
             }
         }
 
